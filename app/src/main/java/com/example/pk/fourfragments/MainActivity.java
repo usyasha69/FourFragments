@@ -1,11 +1,10 @@
 package com.example.pk.fourfragments;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -37,10 +36,26 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(ColorFragment.newInstance(Color.GREEN));
         fragments.add(ColorFragment.newInstance(Color.YELLOW));
         fragments.add(ColorFragment.newInstance(Color.BLUE));
+
+        final int DIFFERENT_COLORS = 4;
+        final int REITERATION_NUMBER = 10;
+
+        for (int i = 0; i < REITERATION_NUMBER; i++) {
+            //reverse color
+            for (int j = DIFFERENT_COLORS - 2; j > 0; j--) {
+                fragments.add(fragments.get(j));
+            }
+
+            //direct color
+            for (int j = 0; j < DIFFERENT_COLORS; j++) {
+                fragments.add(fragments.get(j));
+            }
+        }
     }
 
     private void showFragments() {
-        final Handler handler = new Handler();
+        Handler handler = new Handler();
+        int timeCounter = 0;
 
         for (int i = 0; i < fragments.size(); i++) {
             final int finalI = i;
@@ -51,13 +66,11 @@ public class MainActivity extends AppCompatActivity {
                     final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.root, fragments.get(finalI));
                     ft.commit();
-
-                    Toast.makeText(getApplicationContext(), "Change color: " + finalI
-                            , Toast.LENGTH_SHORT).show();
                 }
             };
 
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, timeCounter);
+            timeCounter += 1000;
         }
     }
 }
